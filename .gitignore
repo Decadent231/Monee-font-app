@@ -1,2 +1,11 @@
 money/
 node_modules/
+
+app/.gradle/
+app/.idea/
+app/build/
+app/android/build/
+app/android/release/
+app/local.properties
+*.apk
+*.iml
