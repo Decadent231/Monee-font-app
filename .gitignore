@@ -7,7 +7,7 @@ app/build/
 app/android/build/
 app/android/release/
 app/local.properties
+app/android/local.properties
+
 *.apk
 *.iml
-
-app/android/build/
