@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -15,7 +15,7 @@
   <div class="app-container">
     <nav class="sidebar">
       <div class="logo">
-        <span class="logo-icon">💰</span>
+        <span class="logo-icon">💵</span>
         <span class="logo-text">记账本</span>
       </div>
       <ul class="nav-menu">
@@ -24,7 +24,7 @@
           <span class="nav-text">概览</span>
         </li>
         <li class="nav-item" data-page="records">
-          <span class="nav-icon">📝</span>
+          <span class="nav-icon">🧾</span>
           <span class="nav-text">记账</span>
         </li>
         <li class="nav-item" data-page="statistics">
@@ -32,7 +32,7 @@
           <span class="nav-text">统计</span>
         </li>
         <li class="nav-item" data-page="categories">
-          <span class="nav-icon">🏷️</span>
+          <span class="nav-icon">🗂️</span>
           <span class="nav-text">分类</span>
         </li>
         <li class="nav-item" data-page="budget">
@@ -59,7 +59,7 @@
         <div id="dashboardPage" class="page active">
           <div class="summary-cards">
             <div class="summary-card income">
-              <div class="card-icon">💵</div>
+              <div class="card-icon">💰</div>
               <div class="card-info">
                 <span class="card-label">本月收入</span>
                 <span class="card-amount" id="monthIncome">¥0.00</span>
@@ -73,7 +73,7 @@
               </div>
             </div>
             <div class="summary-card balance">
-              <div class="card-icon">💎</div>
+              <div class="card-icon">💼</div>
               <div class="card-info">
                 <span class="card-label">本月结余</span>
                 <span class="card-amount" id="monthBalance">¥0.00</span>
@@ -97,7 +97,7 @@
                 <span class="spotlight-eyebrow">预算节奏</span>
                 <h3>今天建议最多支出</h3>
                 <div class="spotlight-amount" id="dashboardDailyAvailable">¥0.00</div>
-                <p class="spotlight-meta" id="dashboardDailyMeta">剩余 0 天，按当前预算节奏继续</p>
+                <p class="spotlight-meta" id="dashboardDailyMeta">剩余 0 天，按预算节奏消费</p>
               </div>
             </div>
             <div class="spotlight-card spotlight-secondary">
@@ -118,8 +118,8 @@
               <div class="card-body">
                 <div class="records-overview-list" id="recentRecordsList">
                   <div class="empty-state">
-                    <span class="empty-icon">📭</span>
-                    <p>暂无记录，开始记账吧！</p>
+                    <span class="empty-icon">📝</span>
+                    <p>暂无记录，开始记账吧？</p>
                   </div>
                 </div>
               </div>
@@ -187,13 +187,11 @@
                   <th>操作</th>
                 </tr>
               </thead>
-              <tbody id="recordsTableBody">
-              </tbody>
+              <tbody id="recordsTableBody"></tbody>
             </table>
           </div>
 
-          <div class="pagination" id="pagination">
-          </div>
+          <div class="pagination" id="pagination"></div>
         </div>
 
         <div id="statisticsPage" class="page">
@@ -239,8 +237,7 @@
                 <h3>支出分类统计</h3>
               </div>
               <div class="card-body">
-                <div class="category-stats" id="expenseCategoryStats">
-                </div>
+                <div class="category-stats" id="expenseCategoryStats"></div>
               </div>
             </div>
             <div class="card">
@@ -248,8 +245,7 @@
                 <h3>收入分类统计</h3>
               </div>
               <div class="card-body">
-                <div class="category-stats" id="incomeCategoryStats">
-                </div>
+                <div class="category-stats" id="incomeCategoryStats"></div>
               </div>
             </div>
           </div>
@@ -278,8 +274,7 @@
               <h3 id="trendChartTitle">收支趋势</h3>
             </div>
             <div class="card-body">
-              <div class="trend-container" id="trendChart">
-              </div>
+              <div class="trend-container" id="trendChart"></div>
             </div>
           </div>
         </div>
@@ -295,8 +290,7 @@
             </button>
           </div>
 
-          <div class="categories-grid" id="categoriesGrid">
-          </div>
+          <div class="categories-grid" id="categoriesGrid"></div>
         </div>
 
         <div id="budgetPage" class="page">
@@ -426,25 +420,25 @@
             <label>图标</label>
             <div class="icon-selector" id="iconSelector">
               <span class="icon-option selected" data-icon="🍽️">🍽️</span>
-              <span class="icon-option" data-icon="🚗">🚗</span>
-              <span class="icon-option" data-icon="🛒">🛒</span>
+              <span class="icon-option" data-icon="🚇">🚇</span>
+              <span class="icon-option" data-icon="🛍️">🛍️</span>
               <span class="icon-option" data-icon="🎮">🎮</span>
-              <span class="icon-option" data-icon="💊">💊</span>
+              <span class="icon-option" data-icon="🏥">🏥</span>
               <span class="icon-option" data-icon="📚">📚</span>
               <span class="icon-option" data-icon="🏠">🏠</span>
-              <span class="icon-option" data-icon="💧">💧</span>
-              <span class="icon-option" data-icon="⚡">⚡</span>
               <span class="icon-option" data-icon="📱">📱</span>
-              <span class="icon-option" data-icon="👕">👕</span>
-              <span class="icon-option" data-icon="💄">💄</span>
-              <span class="icon-option" data-icon="🎁">🎁</span>
-              <span class="icon-option" data-icon="✈️">✈️</span>
-              <span class="icon-option" data-icon="🎵">🎵</span>
-              <span class="icon-option" data-icon="💰">💰</span>
-              <span class="icon-option" data-icon="💵">💵</span>
-              <span class="icon-option" data-icon="📈">📈</span>
+              <span class="icon-option" data-icon="⚽">⚽</span>
+              <span class="icon-option" data-icon="📰">📰</span>
               <span class="icon-option" data-icon="💼">💼</span>
-              <span class="icon-option" data-icon="🏆">🏆</span>
+              <span class="icon-option" data-icon="🎁">🎁</span>
+              <span class="icon-option" data-icon="📈">📈</span>
+              <span class="icon-option" data-icon="✈️">✈️</span>
+              <span class="icon-option" data-icon="🎓">🎓</span>
+              <span class="icon-option" data-icon="💵">💵</span>
+              <span class="icon-option" data-icon="💰">💰</span>
+              <span class="icon-option" data-icon="📊">📊</span>
+              <span class="icon-option" data-icon="💈">💈</span>
+              <span class="icon-option" data-icon="🎳">🎳</span>
             </div>
             <input type="hidden" id="selectedIcon" value="🍽️">
           </div>

@@ -247,11 +247,11 @@ function navigateTo(page) {
     });
 
     const titles = {
-        dashboard: '姒傝',
-        records: '璁拌处璁板綍',
-        statistics: '缁熻鍒嗘瀽',
-        categories: '鍒嗙被绠＄悊',
-        budget: '棰勭畻绠＄悊'
+        dashboard: '概览',
+        records: '记账记录',
+        statistics: '统计分析',
+        categories: '分类管理',
+        budget: '预算管理'
     };
     dom.pageTitle.textContent = titles[page] || page;
 
@@ -292,7 +292,7 @@ async function apiRequest(endpoint, options = {}) {
         const data = await response.json();
 
         if (data.code !== 200) {
-            throw new Error(data.message || '璇锋眰澶辫触');
+            throw new Error(data.message || '请求失败');
         }
 
         return data.data;
@@ -330,7 +330,7 @@ function getDefaultCategories() {
 }
 
 function updateCategoryFilter() {
-    dom.filterCategory.innerHTML = '<option value="">鍏ㄩ儴</option>';
+    dom.filterCategory.innerHTML = '<option value="">全部</option>';
     state.categories.forEach(cat => {
         const option = document.createElement('option');
         option.value = cat.id;
@@ -341,7 +341,7 @@ function updateCategoryFilter() {
 
 function updateCategoryOptions() {
     const type = document.querySelector('input[name="type"]:checked').value;
-    dom.categorySelect.innerHTML = '<option value="">璇烽€夋嫨鍒嗙被</option>';
+    dom.categorySelect.innerHTML = '<option value="">请选择分类</option>';
 
     const filteredCategories = state.categories.filter(cat => cat.type === type);
     filteredCategories.forEach(cat => {
@@ -383,7 +383,7 @@ function getMockDashboardData() {
         categoryStats: [
             { categoryId: 1, categoryName: '餐饮', amount: 1200, count: 35 },
             { categoryId: 2, categoryName: '交通', amount: 500, count: 20 },
-            { categoryId: 3, categoryName: '璐墿', amount: 800, count: 10 }
+            { categoryId: 3, categoryName: '购物', amount: 800, count: 10 }
         ]
     };
 }
@@ -410,7 +410,7 @@ function updateDashboardUI(stats, budget, dailyBudget, records, categoryStats) {
                     <div class="record-icon">${getCategoryIcon(record.categoryId)}</div>
                     <div class="record-info">
                         <div class="record-category">${record.categoryName}</div>
-                        <div class="record-date">${record.date}${record.remark ? ` 路 ${record.remark}` : ''}</div>
+                        <div class="record-date">${record.date}${record.remark ? ` · ${record.remark}` : ''}</div>
                     </div>
                 </div>
                 <div class="record-amount ${record.type}">${record.type === 'expense' ? '-' : '+'}${formatCurrency(record.amount)}</div>
@@ -419,8 +419,8 @@ function updateDashboardUI(stats, budget, dailyBudget, records, categoryStats) {
     } else {
         dom.recentRecordsList.innerHTML = `
             <div class="empty-state">
-                <span class="empty-icon">馃摥</span>
-                <p>鏆傛棤璁板綍锛屽紑濮嬭璐﹀惂锛?/p>
+                <span class="empty-icon">📝</span>
+                <p>暂无记录，开始记账吧？/p>
             </div>
         `;
     }
@@ -430,15 +430,15 @@ function updateDashboardUI(stats, budget, dailyBudget, records, categoryStats) {
 
 function getCategoryIcon(categoryId) {
     const category = state.categories.find(c => c.id === categoryId);
-    return category ? category.icon : '馃摑';
+    return category ? category.icon : '🧾';
 }
 
 function renderCategoryChart(categoryStats) {
     if (!categoryStats || categoryStats.length === 0) {
         dom.categoryChart.innerHTML = `
             <div class="empty-state">
-                <span class="empty-icon">馃搳</span>
-                <p>鏆傛棤鏁版嵁</p>
+                <span class="empty-icon">📊</span>
+                <p>暂无数据</p>
             </div>
         `;
         return;
@@ -470,7 +470,7 @@ function renderCategoryChart(categoryStats) {
     dom.categoryChart.innerHTML = `
         <div class="donut-chart-layout">
             <div class="chart-pie">
-                <svg class="donut-chart" viewBox="0 0 200 200" aria-label="鏀嚭鍒嗙被楗煎浘">
+                <svg class="donut-chart" viewBox="0 0 200 200" aria-label="支出分类饼图">
                     <circle class="donut-track" cx="100" cy="100" r="${radius}"></circle>
                     ${segments.map(segment => `
                         <circle
@@ -485,7 +485,7 @@ function renderCategoryChart(categoryStats) {
                     `).join('')}
                 </svg>
                 <div class="pie-center">
-                    <span class="pie-center-label">鎬绘敮鍑?/span>
+                    <span class="pie-center-label">总支出</span>
                     <span class="pie-center-value">${formatCurrency(total)}</span>
                 </div>
             </div>
@@ -495,7 +495,7 @@ function renderCategoryChart(categoryStats) {
                         <span class="legend-color" style="background: ${segment.color}"></span>
                         <div class="legend-content">
                             <span class="legend-name">${segment.categoryName}</span>
-                            <span class="legend-meta">${formatCurrency(segment.amount)} 路 ${(segment.percent * 100).toFixed(1)}%</span>
+                            <span class="legend-meta">${formatCurrency(segment.amount)} · ${(segment.percent * 100).toFixed(1)}%</span>
                         </div>
                     </div>
                 `).join('')}
@@ -550,7 +550,7 @@ function renderRecordsTable() {
         dom.recordsTableBody.innerHTML = `
             <tr>
                 <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
-                    鏆傛棤璁板綍
+                    暂无记录
                 </td>
             </tr>
         `;
@@ -560,14 +560,14 @@ function renderRecordsTable() {
     dom.recordsTableBody.innerHTML = state.records.map(record => `
         <tr>
             <td>${record.date}</td>
-            <td><span class="type-badge ${record.type}">${record.type === 'expense' ? '鏀嚭' : '鏀跺叆'}</span></td>
+            <td><span class="type-badge ${record.type}">${record.type === 'expense' ? '支出' : '收入'}</span></td>
             <td>${getCategoryIcon(record.categoryId)} ${record.categoryName}</td>
             <td class="amount-cell ${record.type}">${record.type === 'expense' ? '-' : '+'}${formatCurrency(record.amount)}</td>
             <td>${record.remark || '-'}</td>
             <td>
                 <div class="action-btns">
-                    <button class="action-btn edit" onclick="editRecord(${record.id})" title="缂栬緫">鉁忥笍</button>
-                    <button class="action-btn delete" onclick="deleteRecord(${record.id})" title="鍒犻櫎">馃棏锔?/button>
+                    <button class="action-btn edit" onclick="editRecord(${record.id})" title="编辑">✎</button>
+                    <button class="action-btn delete" onclick="deleteRecord(${record.id})" title="删除">🗑</button>
                 </div>
             </td>
         </tr>
@@ -583,7 +583,7 @@ function renderPagination() {
         return;
     }
 
-    let html = `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">涓婁竴椤?/button>`;
+    let html = `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">上一页</button>`;
 
     for (let i = 1; i <= totalPages; i++) {
         if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
@@ -593,7 +593,7 @@ function renderPagination() {
         }
     }
 
-    html += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">涓嬩竴椤?/button>`;
+    html += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">下一页</button>`;
 
     dom.pagination.innerHTML = html;
 }
@@ -607,7 +607,7 @@ function openRecordModal(record = null) {
     dom.recordModal.classList.add('active');
 
     if (record) {
-        dom.recordModalTitle.textContent = '缂栬緫璁板綍';
+        dom.recordModalTitle.textContent = '编辑记录';
         dom.recordId.value = record.id;
         document.querySelector(`input[name="type"][value="${record.type}"]`).checked = true;
         dom.amount.value = record.amount;
@@ -1215,4 +1215,7 @@ window.deleteCategory = deleteCategory;
 window.goToPage = goToPage;
 
 document.addEventListener('DOMContentLoaded', init);
+
+
+
 
