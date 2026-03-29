@@ -9,3 +9,5 @@ app/android/release/
 app/local.properties
 *.apk
 *.iml
+
+app/android/build/
