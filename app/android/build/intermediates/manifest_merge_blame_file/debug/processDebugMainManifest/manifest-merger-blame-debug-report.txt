@@ -31,12 +31,12 @@
 21-->[androidx.core:core:1.13.1] C:\Users\Ye\.gradle\caches\9.0.0\transforms\8c97d544f9fbff002fa0e9b4e2fe7242\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 22        android:debuggable="true"
 23        android:extractNativeLibs="false"
-24        android:icon="@android:drawable/sym_def_app_icon"
-24-->F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:7:9-58
-25        android:label="记账本"
-25-->F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:8:9-28
-26        android:roundIcon="@android:drawable/sym_def_app_icon"
-26-->F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:9:9-63
+24        android:icon="@mipmap/ic_launcher"
+24-->F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:7:9-43
+25        android:label="@string/app_name"
+25-->F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:8:9-41
+26        android:roundIcon="@mipmap/ic_launcher_round"
+26-->F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:9:9-54
 27        android:supportsRtl="true"
 27-->F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:10:9-35
 28        android:theme="@style/Theme.MoneyCodex"

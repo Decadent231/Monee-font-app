@@ -115,11 +115,11 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Ye\.gradle\caches\
 	android:supportsRtl
 		ADDED from F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:10:9-35
 	android:label
-		ADDED from F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:8:9-28
+		ADDED from F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:8:9-41
 	android:roundIcon
-		ADDED from F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:9:9-63
+		ADDED from F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:9:9-54
 	android:icon
-		ADDED from F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:7:9-58
+		ADDED from F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:7:9-43
 	android:allowBackup
 		ADDED from F:\Data\YJF\前端学习\Money_codex\app\android\src\main\AndroidManifest.xml:6:9-35
 	android:theme
