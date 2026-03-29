@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>记账本 - 个人财务管理</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles-modern.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="logo">
+        <span class="logo-icon">💰</span>
+        <span class="logo-text">记账本</span>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">概览</span>
+        </li>
+        <li class="nav-item" data-page="records">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">记账</span>
+        </li>
+        <li class="nav-item" data-page="statistics">
+          <span class="nav-icon">📈</span>
+          <span class="nav-text">统计</span>
+        </li>
+        <li class="nav-item" data-page="categories">
+          <span class="nav-icon">🏷️</span>
+          <span class="nav-text">分类</span>
+        </li>
+        <li class="nav-item" data-page="budget">
+          <span class="nav-icon">🎯</span>
+          <span class="nav-text">预算</span>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="main-content">
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title" id="pageTitle">概览</h1>
+        </div>
+        <div class="header-right">
+          <div class="current-date" id="currentDate"></div>
+          <button class="btn btn-primary" id="addRecordBtn">
+            <span>+</span> 记一笔
+          </button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <div id="dashboardPage" class="page active">
+          <div class="summary-cards">
+            <div class="summary-card income">
+              <div class="card-icon">💵</div>
+              <div class="card-info">
+                <span class="card-label">本月收入</span>
+                <span class="card-amount" id="monthIncome">¥0.00</span>
+              </div>
+            </div>
+            <div class="summary-card expense">
+              <div class="card-icon">💸</div>
+              <div class="card-info">
+                <span class="card-label">本月支出</span>
+                <span class="card-amount" id="monthExpense">¥0.00</span>
+              </div>
+            </div>
+            <div class="summary-card balance">
+              <div class="card-icon">💎</div>
+              <div class="card-info">
+                <span class="card-label">本月结余</span>
+                <span class="card-amount" id="monthBalance">¥0.00</span>
+              </div>
+            </div>
+            <div class="summary-card budget">
+              <div class="card-icon">🎯</div>
+              <div class="card-info">
+                <span class="card-label">预算剩余</span>
+                <span class="card-amount" id="budgetRemaining">¥0.00</span>
+              </div>
+              <div class="budget-progress">
+                <div class="progress-bar" id="budgetProgress"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-spotlight">
+            <div class="spotlight-card spotlight-primary">
+              <div class="spotlight-copy">
+                <span class="spotlight-eyebrow">预算节奏</span>
+                <h3>今天建议最多支出</h3>
+                <div class="spotlight-amount" id="dashboardDailyAvailable">¥0.00</div>
+                <p class="spotlight-meta" id="dashboardDailyMeta">剩余 0 天，按当前预算节奏继续</p>
+              </div>
+            </div>
+            <div class="spotlight-card spotlight-secondary">
+              <span class="spotlight-eyebrow">本月预算使用</span>
+              <div class="spotlight-inline">
+                <strong id="dashboardBudgetUsage">0%</strong>
+                <span id="dashboardBudgetMeta">本月预算尚未设置</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="card recent-records">
+              <div class="card-header">
+                <h3>最近记录</h3>
+                <a href="#" class="view-all" data-page="records">查看全部</a>
+              </div>
+              <div class="card-body">
+                <div class="records-overview-list" id="recentRecordsList">
+                  <div class="empty-state">
+                    <span class="empty-icon">📭</span>
+                    <p>暂无记录，开始记账吧！</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card category-chart">
+              <div class="card-header">
+                <h3>支出分类</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-container" id="categoryChart">
+                  <div class="empty-state">
+                    <span class="empty-icon">📊</span>
+                    <p>暂无数据</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="recordsPage" class="page">
+          <div class="filter-bar">
+            <div class="filter-group filter-group-wide">
+              <label>日期范围</label>
+              <div class="date-range-inline">
+                <input type="date" id="filterStartDate" class="date-input">
+                <span class="date-separator">至</span>
+                <input type="date" id="filterEndDate" class="date-input">
+              </div>
+            </div>
+            <div class="filter-group">
+              <label>类型</label>
+              <select id="filterType" class="select-input">
+                <option value="">全部</option>
+                <option value="expense">支出</option>
+                <option value="income">收入</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>分类</label>
+              <select id="filterCategory" class="select-input">
+                <option value="">全部</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>关键词</label>
+              <input type="text" id="filterKeyword" class="select-input" placeholder="搜索备注内容">
+            </div>
+            <div class="filter-actions">
+              <button class="btn btn-secondary" id="filterBtn">筛选</button>
+              <button class="btn btn-outline" id="resetFilterBtn">重置</button>
+            </div>
+          </div>
+
+          <div class="records-table-container">
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>类型</th>
+                  <th>分类</th>
+                  <th>金额</th>
+                  <th>备注</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="recordsTableBody">
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination" id="pagination">
+          </div>
+        </div>
+
+        <div id="statisticsPage" class="page">
+          <div class="stats-header">
+            <div class="stats-mode-switch">
+              <button class="stats-mode-btn active" id="statsMonthModeBtn" data-mode="month">月度统计</button>
+              <button class="stats-mode-btn" id="statsYearModeBtn" data-mode="year">年度统计</button>
+            </div>
+            <div class="month-selector" id="statsMonthSelector">
+              <button class="btn btn-icon" id="prevMonth">‹</button>
+              <span class="current-month" id="currentMonth"></span>
+              <button class="btn btn-icon" id="nextMonth">›</button>
+            </div>
+            <div class="year-selector" id="statsYearSelector">
+              <button class="btn btn-icon" id="prevYear">‹</button>
+              <span class="current-year" id="currentYear"></span>
+              <button class="btn btn-icon" id="nextYear">›</button>
+            </div>
+          </div>
+
+          <div class="stats-cards">
+            <div class="stat-card">
+              <div class="stat-value expense" id="statExpense">¥0.00</div>
+              <div class="stat-label">总支出</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value income" id="statIncome">¥0.00</div>
+              <div class="stat-label">总收入</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value balance" id="statBalance">¥0.00</div>
+              <div class="stat-label">结余</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="statAuxiliary">0</div>
+              <div class="stat-label" id="statAuxiliaryLabel">活跃天数</div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3>支出分类统计</h3>
+              </div>
+              <div class="card-body">
+                <div class="category-stats" id="expenseCategoryStats">
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>收入分类统计</h3>
+              </div>
+              <div class="card-body">
+                <div class="category-stats" id="incomeCategoryStats">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-pie-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3>支出分类占比</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-container" id="expenseCategoryPieChart"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>收入分类占比</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-container" id="incomeCategoryPieChart"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card trend-chart">
+            <div class="card-header">
+              <h3 id="trendChartTitle">收支趋势</h3>
+            </div>
+            <div class="card-body">
+              <div class="trend-container" id="trendChart">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="categoriesPage" class="page">
+          <div class="categories-header">
+            <div class="category-tabs">
+              <button class="tab-btn active" data-type="expense">支出分类</button>
+              <button class="tab-btn" data-type="income">收入分类</button>
+            </div>
+            <button class="btn btn-primary" id="addCategoryBtn">
+              <span>+</span> 添加分类
+            </button>
+          </div>
+
+          <div class="categories-grid" id="categoriesGrid">
+          </div>
+        </div>
+
+        <div id="budgetPage" class="page">
+          <div class="budget-header">
+            <div class="month-selector">
+              <button class="btn btn-icon" id="budgetPrevMonth">‹</button>
+              <span class="current-month" id="budgetCurrentMonth"></span>
+              <button class="btn btn-icon" id="budgetNextMonth">›</button>
+            </div>
+          </div>
+
+          <div class="budget-overview">
+            <div class="budget-card">
+              <div class="budget-info">
+                <span class="budget-label">月度预算</span>
+                <span class="budget-amount" id="budgetAmount">¥0.00</span>
+              </div>
+              <button class="btn btn-outline" id="editBudgetBtn">设置预算</button>
+            </div>
+
+            <div class="budget-details">
+              <div class="budget-detail-item">
+                <span class="detail-label">已支出</span>
+                <span class="detail-value expense" id="budgetSpent">¥0.00</span>
+              </div>
+              <div class="budget-detail-item">
+                <span class="detail-label">剩余</span>
+                <span class="detail-value" id="budgetRemainingDetail">¥0.00</span>
+              </div>
+              <div class="budget-detail-item">
+                <span class="detail-label">每日可用</span>
+                <span class="detail-value" id="dailyAvailable">¥0.00</span>
+              </div>
+              <div class="budget-detail-item">
+                <span class="detail-label">剩余天数</span>
+                <span class="detail-value" id="daysRemaining">0 天</span>
+              </div>
+            </div>
+
+            <div class="budget-progress-container">
+              <div class="progress-info">
+                <span>预算使用进度</span>
+                <span id="budgetPercent">0%</span>
+              </div>
+              <div class="progress-bar-large">
+                <div class="progress-fill" id="budgetProgressFill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="recordModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="recordModalTitle">记一笔</h3>
+        <button class="modal-close" id="closeRecordModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="recordForm">
+          <input type="hidden" id="recordId">
+
+          <div class="form-group">
+            <label>类型</label>
+            <div class="type-selector">
+              <label class="type-option expense">
+                <input type="radio" name="type" value="expense" checked>
+                <span class="type-btn">支出</span>
+              </label>
+              <label class="type-option income">
+                <input type="radio" name="type" value="income">
+                <span class="type-btn">收入</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>金额</label>
+            <div class="amount-input-wrapper">
+              <span class="currency">¥</span>
+              <input type="number" id="amount" step="0.01" min="0" placeholder="0.00" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>分类</label>
+            <select id="categorySelect" class="select-input" required>
+              <option value="">请选择分类</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>日期</label>
+            <input type="date" id="recordDate" class="date-input" required>
+          </div>
+
+          <div class="form-group">
+            <label>备注</label>
+            <textarea id="remark" placeholder="添加备注..." rows="2"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="cancelRecordBtn">取消</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="categoryModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="categoryModalTitle">添加分类</h3>
+        <button class="modal-close" id="closeCategoryModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="categoryForm">
+          <input type="hidden" id="categoryId">
+          <input type="hidden" id="categoryType" value="expense">
+
+          <div class="form-group">
+            <label>图标</label>
+            <div class="icon-selector" id="iconSelector">
+              <span class="icon-option selected" data-icon="🍽️">🍽️</span>
+              <span class="icon-option" data-icon="🚗">🚗</span>
+              <span class="icon-option" data-icon="🛒">🛒</span>
+              <span class="icon-option" data-icon="🎮">🎮</span>
+              <span class="icon-option" data-icon="💊">💊</span>
+              <span class="icon-option" data-icon="📚">📚</span>
+              <span class="icon-option" data-icon="🏠">🏠</span>
+              <span class="icon-option" data-icon="💧">💧</span>
+              <span class="icon-option" data-icon="⚡">⚡</span>
+              <span class="icon-option" data-icon="📱">📱</span>
+              <span class="icon-option" data-icon="👕">👕</span>
+              <span class="icon-option" data-icon="💄">💄</span>
+              <span class="icon-option" data-icon="🎁">🎁</span>
+              <span class="icon-option" data-icon="✈️">✈️</span>
+              <span class="icon-option" data-icon="🎵">🎵</span>
+              <span class="icon-option" data-icon="💰">💰</span>
+              <span class="icon-option" data-icon="💵">💵</span>
+              <span class="icon-option" data-icon="📈">📈</span>
+              <span class="icon-option" data-icon="💼">💼</span>
+              <span class="icon-option" data-icon="🏆">🏆</span>
+            </div>
+            <input type="hidden" id="selectedIcon" value="🍽️">
+          </div>
+
+          <div class="form-group">
+            <label>名称</label>
+            <input type="text" id="categoryName" placeholder="输入分类名称" required>
+          </div>
+
+          <div class="form-group">
+            <label>描述</label>
+            <input type="text" id="categoryDescription" placeholder="输入分类描述">
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="cancelCategoryBtn">取消</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="budgetModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content modal-sm">
+      <div class="modal-header">
+        <h3>设置预算</h3>
+        <button class="modal-close" id="closeBudgetModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="budgetForm">
+          <div class="form-group">
+            <label>月度预算金额</label>
+            <div class="amount-input-wrapper">
+              <span class="currency">¥</span>
+              <input type="number" id="budgetAmountInput" step="0.01" min="0" placeholder="0.00" required>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="cancelBudgetBtn">取消</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

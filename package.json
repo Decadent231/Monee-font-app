@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@f4ww4z/mcp-mysql-server": "^0.1.0"
+  }
+}
