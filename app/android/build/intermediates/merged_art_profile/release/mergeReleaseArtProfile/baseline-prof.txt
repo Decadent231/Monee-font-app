@@ -1163,6 +1163,49 @@ HSPLandroidx/compose/material/ripple/StateLayer;->**(**)**
 
 Landroidx/compose/material/ripple/*;
 
+# Baseline profile rules for androidx.compose.material
+# =============================================
+
+HSPLandroidx/compose/material/CardKt;->**(**)**
+HSPLandroidx/compose/material/Colors;->**(**)**
+HSPLandroidx/compose/material/ColorsKt**->**(**)**
+HSPLandroidx/compose/material/CheckDrawingCache;->**(**)**
+HSPLandroidx/compose/material/CheckboxDefaults;->**(**)**
+HSPLandroidx/compose/material/DefaultCheckboxColors;->**(**)**
+HSPLandroidx/compose/material/CheckboxKt**->**(**)**
+HSPLandroidx/compose/material/ButtonKt**->**(**)**
+HSPLandroidx/compose/material/AppBarKt**->**(**)**
+HSPLandroidx/compose/material/ProgressIndicatorKt;->**(**)**
+HSPLandroidx/compose/material/IconKt;->**(**)**
+HSPLandroidx/compose/material/ContentAlpha**->**(**)**
+HSPLandroidx/compose/material/ContentColorKt**->**(**)**
+HSPLandroidx/compose/material/ComposableSingletons$**->**(**)**
+HSPLandroidx/compose/material/DefaultElevationOverlay;->**(**)**
+HSPLandroidx/compose/material/ElevationOverlayKt**->**(**)**
+HSPLandroidx/compose/material/DrawerKt;->**(**)**
+HSPLandroidx/compose/material/DrawerState;->**(**)**
+HSPLandroidx/compose/material/FadeInFadeOutState;->**(**)**
+HSPLandroidx/compose/material/FabPosition;->**(**)**
+HSPLandroidx/compose/material/FloatingActionButtonKt**->**(**)**
+HSPLandroidx/compose/material/MaterialTheme;->**(**)**
+HSPLandroidx/compose/material/MinimumTouchTargetModifier;->**(**)**
+HSPLandroidx/compose/material/MaterialTextSelectionColorsKt;->**(**)**
+HSPLandroidx/compose/material/MaterialRippleTheme;->**(**)**
+HSPLandroidx/compose/material/ScaffoldKt**->**(**)**
+HSPLandroidx/compose/material/Shapes**->**(**)**
+HSPLandroidx/compose/material/SnackbarHostKt**->**(**)**
+HSPLandroidx/compose/material/SurfaceKt**->**(**)**
+HSPLandroidx/compose/material/SwipeableKt**->**(**)**
+HSPLandroidx/compose/material/SwipeableState**->**(**)**
+HSPLandroidx/compose/material/SwitchDefaults;->**(**)**
+HSPLandroidx/compose/material/TextKt**->**(**)**
+HSPLandroidx/compose/material/TouchTargetKt**->**(**)**
+HSPLandroidx/compose/material/Typography;->**(**)**
+
+# Prioritize only the top level classes for material. Notably, this ignores icons
+
+Landroidx/compose/material/*;
+
 # Baseline profile rules for androidx.compose.animation.core
 # =============================================
 # In practice it seems like almost every class in animation/core ends up getting loaded in even a
@@ -1271,11 +1314,6 @@ Landroidx/compose/ui/unit/**
 # All of geometry is highly used, small, and mathy, so we include everything
 HSPLandroidx/compose/ui/geometry/*;->**(**)**
 Landroidx/compose/ui/geometry/*;
-# Baseline profile rules for androidx.compose.ui.util
-# =============================================
-HSPLandroidx/compose/ui/util/MathHelpersKt;->lerp(FFF)F
-Landroidx/compose/ui/util/MathHelpersKt;
-
 # Baseline profile rules for androidx.compose.ui.graphics
 # =============================================
 HSPLandroidx/compose/ui/graphics/AndroidCanvas**->**(**)**
@@ -1350,6 +1388,11 @@ HSPLandroidx/compose/ui/graphics/vector/compat/XmlVectorParser_androidKt;->**(**
 #
 # Assume ~all classes will get loaded
 Landroidx/compose/ui/graphics/**;
+# Baseline profile rules for androidx.compose.ui.util
+# =============================================
+HSPLandroidx/compose/ui/util/MathHelpersKt;->lerp(FFF)F
+Landroidx/compose/ui/util/MathHelpersKt;
+
 # Baseline profile rules for androidx.compose.ui.text
 # =============================================
 
