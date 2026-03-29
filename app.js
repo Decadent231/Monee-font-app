@@ -1,4 +1,4 @@
-﻿const API_BASE_URL = 'http://localhost:8080/api';
+﻿const API_BASE_URL = 'http://101.201.235.13:8080/api';
 
 function formatYearMonthLocal(date) {
     const year = date.getFullYear();
