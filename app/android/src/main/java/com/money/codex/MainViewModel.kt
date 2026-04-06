@@ -1,5 +1,6 @@
 ﻿package com.money.codex
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -103,6 +104,15 @@ class MainViewModel(
     var selectedTheme by mutableStateOf(AppThemePreset.Ocean)
         private set
 
+    var reminderEnabled by mutableStateOf(false)
+        private set
+
+    var reminderHour by mutableStateOf(21)
+        private set
+
+    var reminderMinute by mutableStateOf(0)
+        private set
+
     var statisticsPeriod by mutableStateOf("month")
         private set
 
@@ -135,6 +145,36 @@ class MainViewModel(
 
     fun setTheme(preset: AppThemePreset) {
         selectedTheme = preset
+    }
+
+    fun loadReminderSettings(context: Context) {
+        val settings = ReminderScheduler.loadSettings(context)
+        reminderEnabled = settings.enabled
+        reminderHour = settings.hour
+        reminderMinute = settings.minute
+        ReminderScheduler.ensureNotificationChannel(context)
+    }
+
+    fun setReminderEnabled(context: Context, enabled: Boolean) {
+        reminderEnabled = enabled
+        ReminderScheduler.saveSettings(context, enabled, reminderHour, reminderMinute)
+        if (enabled) {
+            ReminderScheduler.scheduleDailyReminder(context, reminderHour, reminderMinute)
+            toastMessage = "提醒已开启"
+        } else {
+            ReminderScheduler.cancelDailyReminder(context)
+            toastMessage = "提醒已关闭"
+        }
+    }
+
+    fun setReminderTime(context: Context, hour: Int, minute: Int) {
+        reminderHour = hour
+        reminderMinute = minute
+        ReminderScheduler.saveSettings(context, reminderEnabled, hour, minute)
+        if (reminderEnabled) {
+            ReminderScheduler.scheduleDailyReminder(context, hour, minute)
+            toastMessage = "提醒时间已更新"
+        }
     }
 
     fun clearToast() {

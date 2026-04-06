@@ -1,6 +1,7 @@
 ﻿package com.money.codex.ui.screens
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -33,6 +34,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -160,13 +162,34 @@ fun DashboardScreen(ui: DashboardUi, onEditRecord: (RecordItem) -> Unit) {
         } else {
             val grouped = recentRecords.groupBy { it.date }
             grouped.forEach { (date, records) ->
+                val dayExpense = records.filter { it.type == "expense" }.sumOf { it.amount }
+                val dayIncome = records.filter { it.type == "income" }.sumOf { it.amount }
+                val dayNet = dayIncome - dayExpense
+                val dayNetText = if (dayNet < 0) {
+                    "支出 -${money(kotlin.math.abs(dayNet))}"
+                } else {
+                    "收入 +${money(dayNet)}"
+                }
                 item {
-                    Text(
-                        text = "$date ${weekdayZh(date)}",
-                        color = TextMuted,
-                        fontSize = 13.sp,
-                        modifier = Modifier.padding(top = 2.dp, bottom = 2.dp)
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 2.dp, bottom = 2.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "$date ${weekdayZh(date)}",
+                            color = TextMuted,
+                            fontSize = 13.sp
+                        )
+                        Text(
+                            text = dayNetText,
+                            color = TextMuted,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
                 items(records) { record ->
                     RecordRow(
@@ -727,9 +750,15 @@ fun SettingsScreen(
     ui: BudgetUi,
     selectedTheme: AppThemePreset,
     onThemeChange: (AppThemePreset) -> Unit,
-    onSetBudget: (Double) -> Unit
+    onSetBudget: (Double) -> Unit,
+    reminderEnabled: Boolean,
+    reminderHour: Int,
+    reminderMinute: Int,
+    onReminderEnabledChange: (Boolean) -> Unit,
+    onReminderTimeChange: (Int, Int) -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     if (showDialog) {
         SetBudgetDialog(
@@ -770,6 +799,44 @@ fun SettingsScreen(
             colors = ButtonDefaults.buttonColors(containerColor = Brand)
         ) {
             Text("设置预算")
+        }
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(18.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
+            Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text("定时提醒", fontWeight = FontWeight.SemiBold)
+                        Text("每天提醒记账", color = TextMuted, fontSize = 13.sp)
+                    }
+                    Switch(
+                        checked = reminderEnabled,
+                        onCheckedChange = { onReminderEnabledChange(it) }
+                    )
+                }
+                OutlinedButton(
+                    onClick = {
+                        TimePickerDialog(
+                            context,
+                            { _, hour, minute -> onReminderTimeChange(hour, minute) },
+                            reminderHour,
+                            reminderMinute,
+                            true
+                        ).show()
+                    },
+                    enabled = reminderEnabled,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("提醒时间  ${String.format(Locale.getDefault(), "%02d:%02d", reminderHour, reminderMinute)}")
+                }
+            }
         }
 
         Card(
